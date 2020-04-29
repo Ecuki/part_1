@@ -2,8 +2,8 @@ import React from "react";
 import styled from "styled-components";
 
 const Styledbutton = styled.button`
-  padding: 10px 15px;
-  margin-right: 10px;
+  padding: 4px 8px;
+  margin: 0 10px;
   background-color: ${(props) => props.color};
   border: none;
   border-radius: 10px;
@@ -17,11 +17,13 @@ const Styledbutton = styled.button`
   }
 `;
 
-export default function Button({ button, onClick }) {
-  const { text, color } = button;
+export default function Button(props) {
+  const {
+    button: { text, color },
+  } = props;
 
   return (
-    <Styledbutton color={color} onClick={onClick}>
+    <Styledbutton color={color} {...props}>
       {text}
     </Styledbutton>
   );

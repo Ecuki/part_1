@@ -3,9 +3,12 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import styled from "styled-components";
 
 import Anecdotes from "./pages/Anecdotes";
+import Countries from "./pages/Countries";
+
 import HalfStack from "./pages/HalfStack";
 import Home from "./pages/Home";
 import NavBar from "./components/NavBar";
+import Phonebook from "./pages/Phonebook";
 import Unicef from "./pages/Unicef";
 
 const Container = styled.div`
@@ -33,6 +36,12 @@ export default function App() {
           </Route>
           <Route exact path="/anecdotes">
             <Anecdotes />
+          </Route>
+          <Route exact path="/phonebook">
+            <Phonebook />
+          </Route>
+          <Route exact path="/countries">
+            <Countries />
           </Route>
           <Route path="/">
             <Home />

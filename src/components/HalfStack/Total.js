@@ -1,11 +1,18 @@
 import React from "react";
 
-export default function Total({ parts }) {
+import { arrSum } from "../../Utils";
+import { StyledPart } from "./Part";
+
+function Total({ parts }) {
   const getTotalExercises = (arr) => {
-    let sum = 0;
-    arr.map((item) => (sum += item.exercise));
-    return sum;
+    return arrSum(parts.map((part) => part.exercises));
   };
 
-  return <p> Number of exercises {getTotalExercises(parts)}</p>;
+  return (
+    <StyledPart>
+      Number of exercises <span>{getTotalExercises(parts)}</span>
+    </StyledPart>
+  );
 }
+
+export default Total;

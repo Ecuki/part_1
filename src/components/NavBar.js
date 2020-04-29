@@ -21,14 +21,17 @@ const List = styled.ul`
   padding: 0px 20px;
   justify-content: space-evenly;
   align-items: center;
+  flex-wrap: wrap;
   list-style: none;
   border-bottom: 2px solid #ddd;
   a {
     text-decoration: none;
     color: #333;
-    padding: 4px 8px;
+    padding: 2px 4px;
+    margin: 0 2px;
     border: 2px solid #333;
     transition: all 0.2s ease;
+    font-size: 0.9rem;
   }
   a:hover {
     color: #ddd;
@@ -51,6 +54,12 @@ export default function NavBar() {
         </li>
         <li>
           <Link to="/anecdotes">Anecdotes</Link>
+        </li>
+        <li>
+          <Link to="/phonebook">Phonebook</Link>
+        </li>
+        <li>
+          <Link to="/countries">Countries</Link>
         </li>
       </List>
     </Nav>
