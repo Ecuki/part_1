@@ -24,9 +24,10 @@ const content = {
 
 export default function Numbers({ persons, remove }) {
   const { removeButton } = content;
+
   return persons.map((person) => (
-    <Number key={person.number}>
-      {person.name} <span>{person.number}</span>
+    <Number key={person.id}>
+      <span>{person.name}</span> <span>{person.number}</span>
       <Button button={removeButton} onClick={() => remove(person.id)} />
     </Number>
   ));

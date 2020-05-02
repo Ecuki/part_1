@@ -20,8 +20,8 @@ const content = {
   inputNumber: "Number:",
   inputSearch: "Search by name or number:",
   initialPersons: [
-    { name: "Arto Hellas", number: "040-123456" },
-    { name: "Ada Lovelace", number: "39-44-5323523" },
+    // { name: "Arto Hellas", number: "040-123456" },
+    // { name: "Ada Lovelace", number: "39-44-5323523" },
   ],
 };
 
@@ -48,7 +48,8 @@ export default function Phonebook() {
     personService
       .create(newPerson)
       .then((returnedPerson) => {
-        setPersons([returnedPerson, ...persons]);
+        console.log(returnedPerson);
+        setPersons(persons.concat(returnedPerson));
         setNewName("");
         setNewNumber("");
         changeMessage(
@@ -57,11 +58,8 @@ export default function Phonebook() {
         );
       })
       .catch((err) => {
-        console.error(err);
-        changeMessage(
-          `Person '${newPerson.name}' cannot be added`,
-          setErrorMessage
-        );
+        console.error(err.response.data);
+        changeMessage(err.response.data.error, setErrorMessage);
       });
   };
 
@@ -100,11 +98,7 @@ export default function Phonebook() {
         );
       })
       .catch((error) => {
-        console.error(error);
-        changeMessage(
-          `Person '${newPerson.name}' has been removed from server`,
-          setErrorMessage
-        );
+        changeMessage(error.response.data.error, setErrorMessage);
         setPersons(persons.filter((p) => p.id !== id));
       });
   };

@@ -66,7 +66,7 @@ export default function Countries() {
         setWeather(null);
       }
     }
-  }, [filtredCountries]);
+  }, [filtredCountries, weatherApi, weather]);
 
   const showCountryDetails = (name) => {
     let country = filtredCountries.filter((country) => country.name === name);
