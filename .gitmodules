@@ -1,0 +1,3 @@
+[submodule "fullstack_server"]
+	path = fullstack_server
+	url = git@github.com:Ecuki/fullstack_server.git
