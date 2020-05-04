@@ -9,7 +9,8 @@ const Country = styled.div`
 const content = {
   button: {
     text: "show",
-    color: "#e7e7e7",
+    color: "grey",
+    size: "mini",
   },
 };
 

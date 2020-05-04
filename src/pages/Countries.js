@@ -11,7 +11,7 @@ const content = {
   coutriesApi: "https://restcountries.eu/rest/v2/all",
   weatherApi: "https://api.openweathermap.org/data/2.5/weather?",
   title: "Search for country",
-  inputSearch: "Search by coutry name:",
+
   emptyMatches: "Nothing to display",
   tooManyMatches: "To many matches, specify another filter",
 };
@@ -24,7 +24,6 @@ const getWeatherApiUrl = (api, city) => {
 export default function Countries() {
   const {
     title,
-    inputSearch,
     coutriesApi,
     emptyMatches,
     tooManyMatches,
@@ -37,7 +36,6 @@ export default function Countries() {
   const [countriesCounter, setCountriesCounter] = useState(0);
 
   const searchConfig = {
-    inputSearch,
     search,
     setSearch,
   };

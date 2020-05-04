@@ -11,16 +11,15 @@ const content = {
   buttons: [
     {
       text: "bad",
-      color: "#f44336",
+      color: "red",
     },
     {
       text: "neutral",
-      color: "#e7e7e7",
     },
 
     {
       text: "good",
-      color: "#4CAF50",
+      color: "green",
     },
   ],
   noFeedback: "No feedback given",

@@ -18,7 +18,8 @@ const Number = styled.p`
 const content = {
   removeButton: {
     text: "X",
-    color: "#f44336",
+    color: "red",
+    size: "tiny",
   },
 };
 

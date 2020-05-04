@@ -13,7 +13,7 @@ const content = {
   numbersTitle: "Numbers:",
   addButton: {
     text: "Add",
-    color: "#4CAF50",
+    color: "green",
   },
 
   inputName: "Name:",

@@ -1,30 +1,14 @@
 import React from "react";
-import styled from "styled-components";
+import { Button } from "semantic-ui-react";
 
-const Styledbutton = styled.button`
-  padding: 4px 8px;
-  margin: 0 10px;
-  background-color: ${(props) => props.color};
-  border: none;
-  border-radius: 10px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  cursor: pointer;
-  box-shadow: 0 0 5px #333;
-  transition: box-shadow 0.1s ease;
-  :hover {
-    box-shadow: 0 0 5px ${(props) => props.color};
-  }
-`;
-
-export default function Button(props) {
+export default function CustomButton(props) {
   const {
-    button: { text, color },
+    button: { text, color, size },
   } = props;
 
   return (
-    <Styledbutton color={color} {...props}>
+    <Button color={color} size={size} {...props}>
       {text}
-    </Styledbutton>
+    </Button>
   );
 }

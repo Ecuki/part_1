@@ -61,6 +61,9 @@ export default function NavBar() {
         <li>
           <Link to="/countries">Countries</Link>
         </li>
+        <li>
+          <Link to="/blog">BlogList</Link>
+        </li>
       </List>
     </Nav>
   );

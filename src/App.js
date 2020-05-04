@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import styled from "styled-components";
 
 import Anecdotes from "./pages/Anecdotes";
+import BlogList from "./pages/BlogList";
 import Countries from "./pages/Countries";
 
 import HalfStack from "./pages/HalfStack";
@@ -44,7 +45,7 @@ export default function App() {
             <Countries />
           </Route>
           <Route path="/">
-            <Home />
+            <BlogList />
           </Route>
         </Switch>
       </Container>

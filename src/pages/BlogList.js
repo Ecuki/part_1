@@ -1,10 +1,10 @@
 import React from "react";
 import Header from "../components/Header";
 
-export default function Home() {
+export default function BlogList() {
   return (
     <>
-      <Header text={"Home"} />
+      <Header text={"BlogList"} />
     </>
   );
 }

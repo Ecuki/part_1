@@ -11,12 +11,11 @@ const content = {
   topTitle: "Anecdote with most votes",
   randomButton: {
     text: "Random",
-    color: "#4CAF50",
   },
 
   voteButton: {
     text: "Vote",
-    color: "#e7e7e7",
+    color: "green",
   },
   anecdotes: [
     "If it hurts, do it more often",
