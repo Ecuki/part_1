@@ -1,31 +1,40 @@
-import axios from "axios";
+import axios from 'axios'
 
-const baseUrl = "/api/persons";
+const baseUrl = '/api/blogs'
 
-const getAll = () => {
-  return axios.get(baseUrl).then((res) => {
-    console.log(res.data);
-    return res.data;
-  });
-};
+let token = null
 
-const create = (newObject) => {
-  return axios.post(baseUrl, newObject).then((res) => res.data);
-};
+const setToken = newToken => {
+  token = `Bearer ${newToken}`
+}
 
-const update = (id, newObject) => {
-  return axios.put(`${baseUrl}/${id}`, newObject).then((res) => res.data);
-};
+const getAll = async () => {
+  const res = await axios.get(baseUrl)
+  return res.data
+}
 
-const remove = (id) => {
-  return axios.delete(`${baseUrl}/${id}`).then((res) => {
-    return res.data;
-  });
-};
+const create = async newObject => {
+  const config = { headers: { Authorization: token } }
+  const res = await axios.post(baseUrl, newObject, config)
+  return res.data
+}
+
+const update = async (id, newObject) => {
+  const config = { headers: { Authorization: token } }
+  const res = await axios.put(`${baseUrl}/${id}`, newObject, config)
+  return res.data
+}
+
+const remove = async id => {
+  const config = { headers: { Authorization: token } }
+  const res = await axios.delete(`${baseUrl}/${id}`, config)
+  return res.data
+}
 
 export default {
   getAll,
   create,
   update,
   remove,
-};
+  setToken
+}
