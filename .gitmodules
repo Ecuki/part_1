@@ -1,4 +1,4 @@
 [submodule "server_app"]
 	path = server_app
 	url = https://github.com/Ecuki/fullstack_server
-	branch = part_5
+	branch = part_6
