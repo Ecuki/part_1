@@ -1,29 +1,16 @@
-import React, { useState } from 'react'
-import { Header } from 'semantic-ui-react'
+import React from 'react';
 
-import Statistic from '../components/Unicef/Statistic'
+import { Header } from 'semantic-ui-react';
 
-const content = {
-  title: 'Give Unicafe a feedback'
-}
+import Statistic from '../components/Unicef/Statistic';
 
-const initialFeedback = {
-  good: 0,
-  neutral: 0,
-  bad: 0,
-  all: '-',
-  average: '-',
-  possitive: '-'
-}
-
-export default function Unicef() {
-  const { title } = content
-  const [feedback, setFeedback] = useState(initialFeedback)
-
+function Unicef() {
   return (
     <>
-      <Header content={title} />
-      <Statistic feedback={feedback} setFeedback={setFeedback} />
+      <Header content="Give Unicafe a feedback" />
+      <Statistic />
     </>
-  )
+  );
 }
+
+export default Unicef;

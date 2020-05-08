@@ -1,30 +1,25 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import _ from 'lodash'
+import React from 'react';
+import _ from 'lodash';
+import { firstLetterToUppercase } from '../Utils';
 
-import { firstLetterToUppercase } from '../Utils'
-
-function Table({ feedback }) {
+function Table({ state }) {
   return (
     <table>
       <tbody>
-        {_.keys(feedback).map(stat => {
+        {_.keys(state).map((stat) => {
           return (
             <tr key={stat}>
               <td>
                 {firstLetterToUppercase(stat)}
                 <span>:</span>
               </td>
-              <td>{feedback[stat]}</td>
+              <td>{state[stat]}</td>
             </tr>
-          )
+          );
         })}
       </tbody>
     </table>
-  )
-}
-Table.propTypes = {
-  feedback: PropTypes.oneOfType([PropTypes.object]).isRequired
+  );
 }
 
-export default Table
+export default Table;
