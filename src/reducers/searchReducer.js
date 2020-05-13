@@ -1,18 +1,18 @@
 const searchReducer = (state = '', action) => {
   switch (action.type) {
     case 'SEARCH':
-      return action.payload;
+      return action.payload
 
     default:
-      return state;
+      return state
   }
-};
+}
 
 export const search = (text) => {
   return {
     type: 'SEARCH',
     payload: text.toLowerCase(),
-  };
-};
+  }
+}
 
-export default searchReducer;
+export default searchReducer

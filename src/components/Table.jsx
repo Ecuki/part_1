@@ -1,6 +1,6 @@
-import React from 'react';
-import _ from 'lodash';
-import { firstLetterToUppercase } from '../Utils';
+import React from 'react'
+import _ from 'lodash'
+import { firstLetterToUppercase } from '../Utils'
 
 function Table({ state }) {
   return (
@@ -15,11 +15,11 @@ function Table({ state }) {
               </td>
               <td>{state[stat]}</td>
             </tr>
-          );
+          )
         })}
       </tbody>
     </table>
-  );
+  )
 }
 
-export default Table;
+export default Table

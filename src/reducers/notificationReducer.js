@@ -1,23 +1,23 @@
-const initialNotification = { isShow: false, message: '', color: '' };
-let timer;
+const initialNotification = { isShow: false, message: '', color: '' }
+let timer
 const notificationReducer = (state = initialNotification, action) => {
   switch (action.type) {
     case 'SHOW_NOTIFICATION':
-      return action.payload;
+      return action.payload
     case 'HIDE_NOTIFICATION':
-      return action.payload;
+      return action.payload
     default:
-      return state;
+      return state
   }
-};
+}
 
 export const setNotificaton = (message, color, seconds) => {
   return async (dispatch) => {
     dispatch({
       type: 'SHOW_NOTIFICATION',
       payload: { isShow: true, message, color },
-    });
-    clearTimeout(timer);
+    })
+    clearTimeout(timer)
     await new Promise(
       () =>
         (timer = setTimeout(
@@ -28,13 +28,8 @@ export const setNotificaton = (message, color, seconds) => {
             }),
           seconds * 1000
         ))
-    );
-  };
-};
-// export const hideNotificaton = () => {
-//   return {
-//     type: 'HIDE_NOTIFICATION',
-//     payload: { isShow: false, message: '' },
-//   };
-// };
-export default notificationReducer;
+    )
+  }
+}
+
+export default notificationReducer

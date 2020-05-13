@@ -1,96 +1,91 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import React from 'react'
+import useUser from '../../hooks/useUser'
 import { Form, Button } from 'semantic-ui-react'
+import { setNotificaton } from '../../reducers/notificationReducer'
+import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 
-import { handleInput, validatePerson } from '../../Utils'
 
-const content = {
-  inputName: 'Name:',
-  inputNumber: 'Number:'
-}
+const AddForm = ({ peopleResoure }) => {
+  const { register, handleSubmit, reset, errors } = useForm();
+  const [user] = useUser('/api/login')
+  const dispatch = useDispatch()
+  const [{ data: persons, errors: personsErrors, sucsess: personsSucsess }, personService] = peopleResoure
 
-const AddForm = ({ addPerson, persons, updateNumber }) => {
-  const { inputName, inputNumber } = content
-  const [newName, setNewName] = useState('')
-  const [newNumber, setNewNumber] = useState('')
 
-  const handleUpdateNumber = () => {
-    const { id } = persons.filter(p => p.name === newName)[0]
+  const onSubmit = ({ name, number }) => {
+
+    const personExist = persons && persons.find(p => p.name === name);
+    const numberExist = persons && persons.find(p => p.number === number);
     const newPerson = {
-      name: newName,
-      number: newNumber
+      name,
+      number
     }
-    updateNumber(id, newPerson)
-    setNewName('')
-    setNewNumber('')
-  }
 
-  const handleAddPerson = e => {
-    e.preventDefault()
-
-    const errors = validatePerson(persons, newNumber, newName)
-    const { name, number } = errors
-
-    if (name.isEmpty) {
-      return window.prompt('Name cannot be empty')
+    if (numberExist) {
+      return window.prompt(`${number} already exist.`)
     }
-    if (number.isEmpty) {
-      return window.prompt('Number cannot be empty')
-    }
-    if (name.exist) {
+    if (!personExist) personService.create(newPerson)
+    if (personExist) {
       const result = window.confirm(
-        `${newName} already exist. Do you really want to change this contact?`
+        `${name} already exist. Do you really want to change this contact?`
       )
-      return result && handleUpdateNumber()
+      if (result) {
+        const { id } = personExist
+        personService.update(id, newPerson)
+      }
     }
-    if (number.exist) {
-      return window.prompt(`${newNumber} already exist.`)
+    if (personsErrors.update || personsErrors.create) {
+      dispatch(setNotificaton(personsErrors.update || personsErrors.create))
     }
-    const newPerson = {
-      name: newName,
-      number: newNumber
+    if (personsSucsess.update || personsSucsess.create) {
+      dispatch(setNotificaton(`Person ${newPerson.name}${personsSucsess.update || personsSucsess.create}`))
     }
-    addPerson(newPerson)
-    setNewName('')
-    setNewNumber('')
-    return null
-  }
+    reset({ name: "", number: "" })
+  };
+
   return (
-    <Form>
+    <Form onSubmit={handleSubmit(onSubmit)}>
+
       <Form.Field>
         <label htmlFor="name">
-          {inputName}
+          Name:
           <input
+            name="name"
             placeholder="Name"
-            value={newName}
-            onChange={handleInput(setNewName)}
+            type="text"
             id="name"
+            ref={register({ required: true, minLength: 3, maxLength: 30 })}
+            defaultValue=""
           />
+          {errors.name && errors.name.type === "required" && <span>This is required</span>}
+          {errors.name && errors.name.type === "maxLength" && <span>Max length exceeded</span>}
+          {errors.name && errors.name.type === "minLength" && <span>Name is to short</span>}
         </label>
       </Form.Field>
       <Form.Field>
         <label htmlFor="number">
-          {inputNumber}
+          Number:
           <input
-            placeholder="Last Name"
-            value={newNumber}
-            onChange={handleInput(setNewNumber)}
+            name="number"
+            placeholder="Number"
+            type="text"
             id="number"
+            ref={register({ required: true, minLength: 8, maxLength: 30 })}
           />
+          {errors.number && errors.number.type === "required" && <span>This is required</span>}
+          {errors.number && errors.number.type === "maxLength" && <span>Max length exceeded</span>}
+          {errors.number && errors.number.type === "minLength" && <span>Number is to short</span>}
         </label>
       </Form.Field>
-      <Button
+
+      {user && <Button
         type="submit"
         content="Add"
         color="green"
-        onClick={handleAddPerson}
-      />
+      />}
     </Form>
   )
 }
-AddForm.propTypes = {
-  persons: PropTypes.oneOfType([PropTypes.array]).isRequired,
-  addPerson: PropTypes.func.isRequired,
-  updateNumber: PropTypes.func.isRequired
-}
+
 export default AddForm

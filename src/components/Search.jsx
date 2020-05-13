@@ -21,8 +21,6 @@ function SearchField({ searchIn }) {
           }
           value={search}
           name="search"
-
-
           showNoResults={false}
         />
       </Grid.Column>

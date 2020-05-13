@@ -1,150 +1,151 @@
-import React, { useState, useEffect, useRef } from 'react'
-import _ from 'lodash'
-import { Button, Header, Container, Grid, Item } from 'semantic-ui-react'
+import React, { useEffect, useRef } from 'react'
+import { Route, Link } from 'react-router-dom'
 
-import { changeMessage } from '../Utils'
+import { useDispatch, useSelector } from 'react-redux'
+import { setNotificaton } from '../reducers/notificationReducer'
+import { checkStorage } from '../reducers/loginReducer'
+import { initBlogs, addBlog } from '../reducers/blogReducer'
+import _ from 'lodash'
+import { Container, Item } from 'semantic-ui-react'
+
 
 import Blog from '../components/BlogList/Blog'
 import BlogForm from '../components/BlogList/BlogForm'
-import LoginForm from '../components/LoginForm'
+
 import Notification from '../components/Notification'
 import Togglable from '../components/Togglable'
-import loginService from '../services/login'
-import blogService from '../services/blogs'
+import styled from 'styled-components'
 
 export default function BlogList() {
-  const [blogs, setBlogs] = useState([])
-  const [user, setUser] = useState(null)
-  const [notificationMessage, setNotificationMessage] = useState(null)
-  const [errorMessage, setErrorMessage] = useState(null)
+  const dispatch = useDispatch()
+  const { blogs, notification, user } = useSelector(state => { return { ...state, blogs: _.orderBy(state.blogs, 'likes', 'desc') } })
+
   const blogFormRef = useRef()
 
   useEffect(() => {
-    getBlogs()
+    init()
   }, [])
 
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedUser')
-    if (loggedUserJSON) {
-      const loggedUser = JSON.parse(loggedUserJSON)
-      setUser(loggedUser)
-      blogService.setToken(loggedUser.token)
-    }
-  }, [])
-
-  useEffect(() => {
-    const blogsSortedByLikes = _.orderBy(blogs, 'likes', 'desc')
-    setBlogs(blogsSortedByLikes)
-  }, [_.sumBy(blogs, 'likes')])
-
-  const login = async credentials => {
-    try {
-      const loginingUser = await loginService.login(credentials)
-      window.localStorage.setItem('loggedUser', JSON.stringify(loginingUser))
-      blogService.setToken(loginingUser.token)
-      setUser(loginingUser)
-    } catch (exception) {
-      changeMessage('Wrong credentials', setErrorMessage)
+  const init = async () => {
+    try { await dispatch(initBlogs()) } catch (exception) {
+      dispatch(setNotificaton(`Something went wrong`, "red", 5))
     }
   }
-  const handleLogout = event => {
-    event.preventDefault()
-    window.localStorage.removeItem('loggedUser')
-    setUser(null)
-    blogService.setToken(user.token)
-  }
-  const getBlogs = async () => {
-    const response = await blogService.getAll(); setBlogs(response)
-  }
+
   const createBlog = async newBlog => {
+    const isExist = blogs.find(blog => blog.url === newBlog.url)
+
     try {
       blogFormRef.current.toggleVisibility()
-      const response = await blogService.create(newBlog)
-      setBlogs(blogs.concat(response))
-      changeMessage(
-        `Blog '${newBlog.title}' by ${newBlog.author} added successfuly`,
-        setNotificationMessage
-      )
+      if (isExist) {
+        const blogToUpdate = { ...newBlog, id: isExist.id, user: isExist.user }
+        updateBlog(blogToUpdate)
+      } else {
+        await dispatch(addBlog(newBlog))
+      }
+
+      dispatch(setNotificaton(
+        `Blog '${newBlog.title}' by ${newBlog.author} added successfuly`, "green", 5))
     } catch (exception) {
-      console.error(exception.response.data)
-      changeMessage(exception.response.data.error, setErrorMessage)
+
+      dispatch(setNotificaton(exception.response.data.error, "red", 5))
     }
   }
-  const addLike = async likedBlog => {
-    const blogToUpdate = {
-      user: likedBlog.user.id,
-      author: likedBlog.author,
-      url: likedBlog.url,
-      title: likedBlog.title,
-      likes: likedBlog.likes + 1
-    }
+
+  const updateBlog = async newBlog => {
 
     try {
-      const response = await blogService.update(likedBlog.id, blogToUpdate)
-      setBlogs(blogs.map(blog => (blog.id !== response.id ? blog : response)))
-      changeMessage(
-        `Blog '${response.title}' by ${response.author} liked successfuly`,
-        setNotificationMessage
-      )
+      blogFormRef.current.toggleVisibility()
+      await dispatch(updateBlog(newBlog))
+      dispatch(setNotificaton(
+        `Blog '${newBlog.title}' by ${newBlog.author} updated successfuly`, "green", 5))
     } catch (exception) {
-      console.error(exception)
-      changeMessage(exception.response.data.error, setErrorMessage)
-    }
-  }
-  const deleteBlog = async blogToDelete => {
-    try {
-      await blogService.remove(blogToDelete.id)
 
-      setBlogs(blogs.filter(blog => blog.id !== blogToDelete.id))
-      changeMessage(
-        `Blog '${blogToDelete.title}' by ${blogToDelete.author} deleted successfuly`,
-        setNotificationMessage
-      )
-    } catch (exception) {
-      console.error(exception)
-      changeMessage(exception.response.data.error, setErrorMessage)
+      dispatch(setNotificaton(exception.response.data.error, "red", 5))
     }
   }
+
+
+
 
   return (
-    <Container>
-      <Grid columns={2}>
-        <Grid.Column>
-          <Header floated="left">
-            {user ? `${user.name} logged in` : 'Log in to apllication'}
-          </Header>
-        </Grid.Column>
-        <Grid.Column textAlign="right">
-          <Button
-            type="submit"
-            content="Logout"
-            color="red"
-            onClick={handleLogout}
-          />
-        </Grid.Column>
-      </Grid>
 
-      <Notification message={notificationMessage} color="green" />
-      <Notification message={errorMessage} color="red" />
-      {user === null && <LoginForm login={login} />}
-      {user && (
-        <>
-          <Item.Group divided>
-            {blogs.map(blog => (
-              <Blog
-                key={blog.id}
-                blog={blog}
-                addLike={addLike}
-                deleteBlog={deleteBlog}
-                user={user}
-              />
-            ))}
-          </Item.Group>
-          <Togglable buttonLabel="New blog" ref={blogFormRef}>
-            <BlogForm createBlog={createBlog} />
-          </Togglable>
-        </>
-      )}
+    user && (
+      <>
+        <Item.Group divided>
+          {blogs.map(blog => (
+            <Blog
+              key={blog.id}
+              blog={blog}
+            />
+          ))}
+        </Item.Group>
+        <Togglable buttonLabel="New blog" ref={blogFormRef}>
+          <BlogForm createBlog={createBlog} />
+        </Togglable>
+      </>
+    )
+
+  )
+}
+
+
+const Nav = styled.nav`
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background-color: #fff;
+`
+
+const List = styled.ul`
+  display: flex;
+  width: 100%;
+  height: 100%;
+  max-width: 980px;
+  padding: 0px 10px;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-wrap: wrap;
+  list-style: none;
+  border-bottom: 2px solid #ddd;
+  a {
+    text-decoration: none;
+    color: #333;
+    padding: 2px 4px;
+    margin: 0 2px;
+
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+  }
+  a:hover {
+    color: #ddd;
+  }
+`
+
+
+export function BlogRoute() {
+  const dispatch = useDispatch()
+  const { user, notification: { message, color, isShow } } = useSelector(state => state)
+  useEffect(() => {
+    dispatch(checkStorage())
+  }, []);
+  return (
+    <Container>
+      <Nav>
+        <List>
+          <li>
+            <Link to={'/blog'}>Blog list</Link>
+          </li>
+        </List>
+      </Nav>
+      <br />
+      {isShow && <Container Notification message={message} color={color} />}
+
+      <Route path={`/blog/`} component={BlogList} exact />
+      <Route path={`/blog/:id`} component={Blog} exact />
+      {!user?.username && <div>You need to login</div>}
     </Container>
   )
 }

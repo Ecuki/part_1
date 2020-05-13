@@ -1,12 +1,12 @@
-import React from 'react';
-import { Form } from 'semantic-ui-react';
-import { useDispatch, useSelector } from 'react-redux';
-import { filterChange } from '../../reducers/filterReducer';
+import React from 'react'
+import { Form } from 'semantic-ui-react'
+import { useDispatch, useSelector } from 'react-redux'
+import { filterChange } from '../../reducers/filterReducer'
 function VotesFilter() {
-  const dispatch = useDispatch();
-  const filter = useSelector((state) => state.filter);
+  const dispatch = useDispatch()
+  const filter = useSelector((state) => state.filter)
 
-  const handleChange = (e, { value }) => dispatch(filterChange(value));
+  const handleChange = (e, { value }) => dispatch(filterChange(value))
 
   return (
     <Form>
@@ -39,6 +39,6 @@ function VotesFilter() {
         />
       </Form.Group>
     </Form>
-  );
+  )
 }
-export default VotesFilter;
+export default VotesFilter

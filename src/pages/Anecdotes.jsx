@@ -1,22 +1,18 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect } from 'react'
 
-import { Header } from 'semantic-ui-react';
-import AnecdotesList from '../components/Anecdotes/AnecdotesList';
-import AnecdoteForm from '../components/Anecdotes/AnecdoteForm';
+import { Header, Container } from 'semantic-ui-react'
 
-import { initAnecdotes } from '../reducers/anecdoteReducer';
+import AnecdotesRouter from '../routes/AnecdotesRouter'
+
+
 function Anecdotes() {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(initAnecdotes());
-  }, [dispatch]);
+
   return (
-    <>
-      <Header content="Anecdotes" />
-      <AnecdoteForm />
-      <AnecdotesList />
-    </>
-  );
+    <Container>
+      <Header content="Software anecdotes" as="h2" />
+
+      <AnecdotesRouter />
+    </Container>
+  )
 }
-export default Anecdotes;
+export default Anecdotes

@@ -9,7 +9,8 @@ const Notification = ({ message, color }) => {
 
   return (
     <Message color={color} size="tiny" id="notification">
-      {message}
+      <Message.Header> {message}</Message.Header>
+
     </Message>
   )
 }

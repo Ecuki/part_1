@@ -13,7 +13,7 @@ function Statistic() {
 
   useEffect(() => {
     setStats(calcStats(state))
-  }, [state]);
+  }, [state])
 
 
   return (
@@ -22,20 +22,20 @@ function Statistic() {
         <Button
           content="Bad"
           color="red"
-          onClick={() => dispatch({ type: "BAD" })}
+          onClick={() => dispatch({ type: 'BAD' })}
         />
         <Button
           content='Neutral'
-          onClick={() => dispatch({ type: "OK" })}
+          onClick={() => dispatch({ type: 'OK' })}
         />
         <Button
           content='Good'
           color='green'
-          onClick={() => dispatch({ type: "GOOD" })}
+          onClick={() => dispatch({ type: 'GOOD' })}
         />
       </div>
       <Header content='Statistics:' />
-      {stats && stats.all === "-" ? <p>No feedback given</p> : <Table state={{ ...state, ...stats }} />}
+      {stats && stats.all === '-' ? <p>No feedback given</p> : <Table state={{ ...state, ...stats }} />}
     </>
   )
 }
